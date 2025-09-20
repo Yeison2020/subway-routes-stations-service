@@ -30,20 +30,3 @@ func PanicHandler() gin.HandlerFunc {
     })
 }
 
-// GlobalErrorHandler handles errors returned from handlers
-func GlobalErrorHandler() gin.HandlerFunc {
-    return func(c *gin.Context) {
-        c.Next() // process request
-
-        errs := c.Errors
-        if len(errs) > 0 {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": gin.H{
-                    "code":    ErrCodeInternal,
-                    "message": "Internal server error",
-                    "details": errs[0].Error(),
-                },
-            })
-        }
-    }
-}

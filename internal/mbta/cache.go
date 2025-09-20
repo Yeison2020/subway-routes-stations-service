@@ -5,60 +5,50 @@ import (
 	"sync"
 )
 
-// In Memory Cache 
+
+// In-Memory Cache
 
 type cacheItem struct {
-
-	value []Station
-
-	experation time.Time
+	value      []Station
+	expiration time.Time
 }
-
 
 type Cache struct {
 	data map[string]cacheItem
-	mux sync.RWMutex
-	ttl time.Duration
+	mux  sync.RWMutex
+	ttl  time.Duration
 }
 
-
-
-
-var StationCache *Cache
+var stationCache *Cache
 
 // InitCache initializes the in-memory cache with TTL in seconds
-
-func InitCache(ttlsSeconds int){
-	StationCache = &Cache{
-		data : make(map[string]cacheItem),
-		ttl: time.Duration(ttlsSeconds) * time.Second,
+func InitCache(ttlSeconds int) {
+	stationCache = &Cache{
+		data: make(map[string]cacheItem),
+		ttl:  time.Duration(ttlSeconds) * time.Second,
 	}
 }
 
-// Get from Cache
-// Mux to read without other readers
 
+
+// get from cache
 func (c *Cache) Get(key string) ([]Station, bool) {
 	c.mux.RLock()
 	defer c.mux.RUnlock()
 
-	item, exits := c.data[key]
-
-	if !exits || time.Now().After(item.experation){
+	item, exists := c.data[key]
+	if !exists || time.Now().After(item.expiration) {
 		return nil, false
 	}
 	return item.value, true
 }
 
-// set Cache
-
-func (c *Cache) Set(key string, value []Station){
+// set cache
+func (c *Cache) Set(key string, value []Station) {
 	c.mux.Lock()
 	defer c.mux.Unlock()
 	c.data[key] = cacheItem{
-		value: value,
-		experation: time.Now().Add(c.ttl),
+		value:      value,
+		expiration: time.Now().Add(c.ttl),
 	}
 }
-
-

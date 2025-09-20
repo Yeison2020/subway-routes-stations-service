@@ -5,18 +5,25 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	// "github.com/yeison2020/subway-routing-service/internal/middlerware"
+
 	"github.com/yeison2020/subway-routing-service/internal/services"
 	"github.com/yeison2020/subway-routing-service/internal/config"
 
+
+
 )
+
+
+
+
 
 func RegisterRoutes(server *gin.Engine) {
 
+	cfg := config.LoadConfig()
 
-	server.GET("/api/v1/health", services.HealthHandler(&config.Config{}))
+	server.GET("/api/v1/health", services.HealthHandler(cfg))
 
-	server.GET("/api/v1/subways", services.GetSubwaysHandler(&config.Config{}))
+	server.GET("/api/v1/subways", services.GetSubwaysHandler(cfg))
 
 
 	// autheticated := server.Group("/")
