@@ -2,7 +2,27 @@ package mbta
 
 import (
 	"time"
+	"sync"
 )
+
+// In Memory Cache 
+
+type cacheItem struct {
+
+	value []Station
+
+	experation time.Time
+}
+
+
+type Cache struct {
+	data map[string]cacheItem
+	mux sync.RWMutex
+	ttl time.Duration
+}
+
+
+
 
 var StationCache *Cache
 

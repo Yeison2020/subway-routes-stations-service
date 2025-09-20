@@ -16,6 +16,8 @@ func RegisterRoutes(server *gin.Engine) {
 
 	server.GET("/api/v1/health", services.HealthHandler(&config.Config{}))
 
+	server.GET("/api/v1/subways", services.GetSubwaysHandler(&config.Config{}))
+
 
 	// autheticated := server.Group("/")
 

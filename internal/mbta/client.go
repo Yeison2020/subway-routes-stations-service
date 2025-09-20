@@ -6,6 +6,57 @@ import (
 	"net/http"
 )
 
+// Models
+
+type Station struct {
+
+	ID string `json:"id"`
+
+	Name string `json:"name"`
+
+}
+
+
+type Route struct {
+
+	ID string `json:"id"`
+
+	Name string `json:"name"`
+
+	Stations []Station `json:"stations`
+
+}
+
+// MBTA API responses
+type RouteResponse struct {
+	Data []struct {
+
+		ID string `json:"id"`
+
+		Attributes  struct {
+
+			Name string `json:"long_name`
+
+		} `json:"attributes"`
+
+	} `json:"data"`
+}
+
+type stopsResponse struct {
+	Data []struct {
+		ID         string `json:"id"`
+		Attributes struct {
+			Name string `json:"name"`
+		} `json:"attributes"`
+	} `json:"data"`
+}
+
+
+
+
+
+
+
 // MBTA API Functions
 
 func FetchRoutes(apikey string) ([]Route, error){

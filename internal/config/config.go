@@ -13,7 +13,6 @@ type Config struct {
 
 
 
-
 func LoadConfig() *Config {
 
 	port := os.Getenv("PORT")

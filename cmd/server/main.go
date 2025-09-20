@@ -9,24 +9,27 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/yeison2020/subway-routing-service/internal/config"
-	
 	"github.com/yeison2020/subway-routing-service/internal/routes"
-		"github.com/yeison2020/subway-routing-service/internal/middlerware"
+	"github.com/yeison2020/subway-routing-service/internal/middlerware"
+	"github.com/yeison2020/subway-routing-service/internal/mbta"
 )
 
 func main() {
 
     // Load .env
 	_ = godotenv.Load()
-	// Load config file 
-	cfg := config.LoadConfig()
 	// Logger initialization
 	middlerware.InitLogger()
+
+	// Init MBTA local cache
+	mbta.InitCache(300) // TTL 5 minutes
+
+	// Load config file 
+	cfg := config.LoadConfig()
 
     gin.SetMode(gin.ReleaseMode)
 
 	server := gin.New()
-	server.Use(middlerware.LoggerMiddleware(middlerware.Logger))
 
 	// Routes 
 	routes.RegisterRoutes(server)
