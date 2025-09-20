@@ -1,42 +1,50 @@
 package main
 
 import (
-
+     "log"
+	 "fmt"
+	 "net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
+
 	"github.com/yeison2020/subway-routing-service/internal/config"
-	"github.com/yeison2020/subway-routing-service/internal/middlerware"
+	
 	"github.com/yeison2020/subway-routing-service/internal/routes"
+		"github.com/yeison2020/subway-routing-service/internal/middlerware"
 )
 
 func main() {
 
     // Load .env
 	_ = godotenv.Load()
-
 	// Load config file 
-
 	cfg := config.LoadConfig()
+	// Logger initialization
+	middlerware.InitLogger()
 
     gin.SetMode(gin.ReleaseMode)
 
-	r := gin.New()
-
-	logger := logrus.New()
-
-	// Plug in middlewares
-	r.Use(middlerware.LoggingMiddleware(logger))
-	r.Use(middlerware.RequestIDMiddlerware())
-
+	server := gin.New()
+	server.Use(middlerware.LoggerMiddleware(middlerware.Logger))
 
 	// Routes 
-	routes.RegisterRoutes(r)
+	routes.RegisterRoutes(server)
 
+	// 404 routes
+	server.NoRoute(func(ctx *gin.Context){
+    	ctx.JSON(http.StatusNotFound, gin.H{
+			"error":   "Endpoint not found",
+			"path":    ctx.Request.URL.Path,
+			"message": "Please check endpoint",
+		})
+
+	})
+
+	fmt.Println("Server started running")
 
 
    	// Run server
-	r.Run(":" + cfg.ServerPort)
+	log.Fatal(server.Run(":" + cfg.ServerPort))
 
 }

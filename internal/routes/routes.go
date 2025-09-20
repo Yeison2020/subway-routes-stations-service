@@ -14,7 +14,7 @@ import (
 func RegisterRoutes(server *gin.Engine) {
 
 
-	server.GET("/api/v1", services.HealthHandler(&config.Config{}))
+	server.GET("/api/v1/health", services.HealthHandler(&config.Config{}))
 
 
 	// autheticated := server.Group("/")
