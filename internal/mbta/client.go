@@ -40,6 +40,22 @@ type stopsResponse struct {
 	} `json:"data"`
 }
 
+// Testing:
+
+type Client interface {
+    FetchRoutes(apiKey string) ([]Route, error)
+    FetchStops(apiKey, routeID string) ([]Station, error)
+}
+
+type RealClient struct{}
+
+func (RealClient) FetchRoutes(apiKey string) ([]Route, error) {
+    return FetchRoutes(apiKey)
+}
+
+func (RealClient) FetchStops(apiKey, routeID string) ([]Station, error) {
+    return FetchStopsCached(apiKey, routeID)
+}
 
 // FetchRoutes gets all subway routes (type 0=light rail, 1=subway)
 func FetchRoutes(apiKey string) ([]Route, error) {

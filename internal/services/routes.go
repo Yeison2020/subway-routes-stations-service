@@ -11,7 +11,7 @@ import (
 )
 
 
-func GetRouteHandler(cfg *config.Config) gin.HandlerFunc {
+func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		start := ctx.Query("start")
 		end := ctx.Query("end")
@@ -23,7 +23,7 @@ func GetRouteHandler(cfg *config.Config) gin.HandlerFunc {
 		}
 
 		// Fetch all routes
-		routes, err := mbta.FetchRoutes(cfg.MBTAApiKey)
+		routes, err := client.FetchRoutes(cfg.MBTAApiKey)
 
 		if err != nil {
 			middlerware.Logger.Error(err.Error())
@@ -35,7 +35,7 @@ func GetRouteHandler(cfg *config.Config) gin.HandlerFunc {
 		// Fetch stations for each route (cached)
 
 		for i, r := range routes {
-			stations, err := mbta.FetchStopsCached(cfg.MBTAApiKey, r.ID)
+			stations, err := client.FetchStops(cfg.MBTAApiKey, r.ID)
 
 			if err != nil {
 				middlerware.Logger.Error(err.Error())

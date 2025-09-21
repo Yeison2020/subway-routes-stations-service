@@ -174,18 +174,8 @@ docker run -p 8080:8080 --env MBTA_API_KEY=your_api_key subway-routing-service
 - Run tests with:
 
 ```bash
-go test ./...
+go test ./internal/tests
 ```
-
----
-
-## Future Improvements
-
-- Return multiple route options if available.  
-- Include travel times or number of stops per segment.  
-- Support weighted shortest path (Dijkstra).  
-- Improve caching with Redis for distributed deployment.  
-
 ---
 
 ## How the Graph and BFS Works

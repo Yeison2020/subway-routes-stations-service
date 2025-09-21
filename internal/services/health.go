@@ -11,7 +11,9 @@ import (
 )
 
 
-func HealthHandler(cfg *config.Config)  gin.HandlerFunc{
+
+
+func HealthHandler(cfg *config.Config, client mbta.Client)  gin.HandlerFunc{
 
 	return func(ctx *gin.Context) {
 
@@ -19,7 +21,7 @@ func HealthHandler(cfg *config.Config)  gin.HandlerFunc{
 			"status": "ok",
 		}
 
-		routes, err := mbta.FetchRoutes(cfg.MBTAApiKey)
+		routes, err := client.FetchRoutes(cfg.MBTAApiKey)
 
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

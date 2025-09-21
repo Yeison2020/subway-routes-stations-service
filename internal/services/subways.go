@@ -12,10 +12,10 @@ import (
 
 
 // GetSubwaysHandler returns all subway routes with their stations
-func GetSubwaysHandler(cfg *config.Config) gin.HandlerFunc {
+func GetSubwaysHandler(cfg *config.Config,  client mbta.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 1. Fetch all subway routes
-		routesData, err := mbta.FetchRoutes(cfg.MBTAApiKey)
+		routesData, err := client.FetchRoutes(cfg.MBTAApiKey)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error 1": err.Error()})
 			return
@@ -25,7 +25,7 @@ func GetSubwaysHandler(cfg *config.Config) gin.HandlerFunc {
 
 		// 2. Fetch stations for each route and nest
 		for _, r := range routesData {
-			stations, err := mbta.FetchStopsCached(cfg.MBTAApiKey, r.ID)
+			stations, err := client.FetchStops(cfg.MBTAApiKey, r.ID)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error 2": err.Error()})
 				return
