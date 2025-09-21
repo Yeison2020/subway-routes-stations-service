@@ -1,0 +1,93 @@
+info:
+  contact: {}
+paths:
+  /api/v1/health:
+    get:
+      consumes:
+      - application/json
+      description: Returns the status of the service and MBTA API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Health check
+      tags:
+      - Health
+  /api/v1/routes:
+    get:
+      consumes:
+      - application/json
+      description: Returns stations, lines, and description for a route between start
+        and end
+      parameters:
+      - description: Start station ID
+        in: query
+        name: start
+        required: true
+        type: string
+      - description: End station ID
+        in: query
+        name: end
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get subway route
+      tags:
+      - Routes
+  /api/v1/subways:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of subway routes with nested stations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all subway routes with their stations
+      tags:
+      - Subways
+swagger: "2.0"

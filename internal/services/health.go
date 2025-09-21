@@ -11,7 +11,21 @@ import (
 )
 
 
-
+// HealthHandler godoc
+// @Summary Health check
+// @Description Returns the status of the service and MBTA API
+// @Tags Health
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} map[string]interface{}
+// @Failure 503 {object} map[string]interface{}
+// @Router /api/v1/health [get]
+func HealthHandlerSwagger(ctx *gin.Context) {
+	ctx.JSON(200, gin.H{
+		"status": "ok",
+		"mbta":   "ok, n routes",
+	})
+}
 
 func HealthHandler(cfg *config.Config, client mbta.Client)  gin.HandlerFunc{
 

@@ -10,6 +10,32 @@ import (
 	"github.com/yeison2020/subway-routing-service/internal/utils"
 )
 
+type RouteResponse struct {
+	Stations    []string `json:"stations"`
+	Lines       []string `json:"lines"`
+	Description string   `json:"description"`
+}
+
+// GetRouteHandlerSwagger godoc
+// @Summary Get subway route
+// @Description Returns stations, lines, and description for a route between start and end
+// @Tags Routes
+// @Accept  json
+// @Produce  json
+// @Param start query string true "Start station ID"
+// @Param end query string true "End station ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/routes [get]
+func GetRouteHandlerSwagger(ctx *gin.Context) {
+	ctx.JSON(200, map[string]interface{}{
+		"stations":    [][]string{{"station1", "station2"}},
+		"lines":       [][]string{{"Red Line"}},
+		"description": "Take Red Line from station1 to station2",
+	})
+}
 
 func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 	return func(ctx *gin.Context) {

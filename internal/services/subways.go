@@ -9,6 +9,37 @@ import (
 	"github.com/yeison2020/subway-routing-service/internal/mbta"
 )
 
+// GetSubwaysHandlerSwagger godoc
+// @Summary Get all subway routes with their stations
+// @Description Returns a list of subway routes with nested stations
+// @Tags Subways
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} map[string]interface{}
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/subways [get]
+func GetSubwaysHandlerSwagger(c *gin.Context) {
+	c.JSON(200, map[string]interface{}{
+		"routes": []map[string]interface{}{
+			{
+				"id":   "Red",
+				"name": "Red Line",
+				"stations": []map[string]string{
+					{"id": "place-alfcl", "name": "Alewife"},
+					{"id": "place-davis", "name": "Davis"},
+				},
+			},
+			{
+				"id":   "Green",
+				"name": "Green Line",
+				"stations": []map[string]string{
+					{"id": "place-lech", "name": "Lechmere"},
+					{"id": "place-north", "name": "North Station"},
+				},
+			},
+		},
+	})
+}
 
 
 // GetSubwaysHandler returns all subway routes with their stations
