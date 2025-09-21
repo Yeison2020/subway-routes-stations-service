@@ -47,11 +47,10 @@ go.work.sum
 .vscode/
 
 # Notes
-
 *.txt
 
 # Folder for Rest calls
-/API-TESTING/
+/api-testing/
 
 # Ignore Air temporary build folder
 /tmp/

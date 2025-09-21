@@ -8,12 +8,18 @@ import (
 type Config struct {
 	ServerPort string
 	MBTAApiKey string
+	Service string
+	Env string
 }
 
 
 func LoadConfig() *Config {
 
 	port := os.Getenv("PORT")
+
+	serviceName := os.Getenv("DD_SERVICE")
+
+	envName := os.Getenv("DD_ENV")
 
 	if port == "" {
 
@@ -32,5 +38,7 @@ func LoadConfig() *Config {
 	return &Config{
 		ServerPort: port,
 		MBTAApiKey: mbtaKey,
+		Service: serviceName,
+		Env: envName,
 	}
 }

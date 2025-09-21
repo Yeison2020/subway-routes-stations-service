@@ -1,6 +1,7 @@
 package main
 
 import (
+	
      "log"
 	 "net/http"
 
@@ -10,8 +11,8 @@ import (
 
 	"github.com/yeison2020/subway-routing-service/internal/config"
 	"github.com/yeison2020/subway-routing-service/internal/routes"
-	"github.com/yeison2020/subway-routing-service/internal/middlerware"
 	"github.com/yeison2020/subway-routing-service/internal/mbta"
+	"github.com/yeison2020/subway-routing-service/internal/middlerware"
 )
 
 func main() {
@@ -33,6 +34,7 @@ func main() {
 
 	// Plug middlerware
 	server.Use(middlerware.LoggerMiddleware(middlerware.Logger))
+	server.Use(middlerware.RequestIdMiddleware())
 	server.Use(middlerware.PanicHandler())
 
 
