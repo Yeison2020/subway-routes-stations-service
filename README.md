@@ -16,7 +16,6 @@ This service models the subway network as a **graph**, supports caching, and pro
 - [Example Response](#example-response)  
 - [Docker](#docker)  
 - [Testing](#testing)  
-- [Future Improvements](#future-improvements)  
 - [How the Graph and BFS Works](#how-the-graph-and-bfs-works)  
 
 ---

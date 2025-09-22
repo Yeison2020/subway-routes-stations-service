@@ -10,7 +10,6 @@ import (
 	"github.com/yeison2020/subway-routing-service/internal/mbta"
 )
 
-
 // HealthHandler godoc
 // @Summary Health check
 // @Description Returns the status of the service and MBTA API
