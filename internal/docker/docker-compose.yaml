@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   datadog-simple-go:
     image: "gcr.io/datadoghq/agent:7.70.2"
