@@ -15,14 +15,14 @@ import (
 
 type MockClient struct{}
 
-func (m MockClient) FetchRoutes(apiKey string) ([]mbta.Route, error) {
+func (m MockClient) FetchRoutes(apiKey string, ctx *gin.Context) ([]mbta.Route, error) {
 	return []mbta.Route{
 		{ID: "Red", Name: "Red Line"},
 		{ID: "Green", Name: "Green Line"},
 	}, nil
 }
 
-func (m MockClient) FetchStops(apiKey, routeID string) ([]mbta.Station, error) {
+func (m MockClient) FetchStops(apiKey, routeID string,  ctx *gin.Context) ([]mbta.Station, error) {
 	if routeID == "Red" {
 		return []mbta.Station{{ID: "R1", Name: "South Station"}}, nil
 	} else if routeID == "Green" {

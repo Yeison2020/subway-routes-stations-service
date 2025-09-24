@@ -19,11 +19,11 @@ type mockMBTAClient struct {
 	err    error
 }
 
-func (m *mockMBTAClient) FetchRoutes(apiKey string) ([]mbta.Route, error) {
+func (m *mockMBTAClient) FetchRoutes(apiKey string, ctx *gin.Context) ([]mbta.Route, error) {
 	return m.routes, m.err
 }
 
-func (m *mockMBTAClient) FetchStops(apiKey, routeID string) ([]mbta.Station, error) {
+func (m *mockMBTAClient) FetchStops(apiKey, routeID string, ctx *gin.Context) ([]mbta.Station, error) {
 	return []mbta.Station{
 		{ID: "1", Name: "Station A"},
 		{ID: "2", Name: "Station B"},

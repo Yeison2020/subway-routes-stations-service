@@ -1,8 +1,11 @@
 package config
 
 import (
-	"fmt"
+	"log"
 	"os"
+
+	"github.com/yeison2020/subway-routing-service/internal/helper"
+	
 )
 
 type Config struct {
@@ -15,30 +18,14 @@ type Config struct {
 
 func LoadConfig() *Config {
 
-	port := os.Getenv("PORT")
-
-	/*
-	Todo:check missing values and add defauls
-	*/
-
-	serviceName := os.Getenv("DD_SERVICE")
-
-	envName := os.Getenv("DD_ENV")
-
-	version := os.Getenv("DD_VERSION")
-
-	if port == "" {
-
-		fmt.Println("Deaulting to port 8080")
-
-		port = "8080"
-
-	}
+	port := helper.GetEnv("PORT", "8080")
+	serviceName := helper.GetEnv("DD_SERVICE","default-service-name" )
+	envName :=  helper.GetEnv("DD_ENV",  "dev")
+	version :=  helper.GetEnv("DD_VERSION", "1.0")
 
 	mbtaKey := os.Getenv("MBTA_API_KEY")
-
 	if mbtaKey == "" {
-		fmt.Println("Missing MBTA KEY")
+		log.Fatal("Missing MBTA KEY")
 	}
 
 	return &Config{

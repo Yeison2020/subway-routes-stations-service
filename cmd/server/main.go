@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -32,11 +31,8 @@ func main() {
 	cfg := config.LoadConfig()
 
 	gin.SetMode(gin.ReleaseMode)
-
 	server := gin.New()
-
 	server.Use(gin.Recovery(), gin.Logger())
-
 	server.Use(gintrace.Middleware(cfg.Service))
 
 	tracer.Start(
@@ -44,8 +40,7 @@ func main() {
 		tracer.WithService(cfg.Service),
 		tracer.WithServiceVersion(cfg.Version),
 	)
-	defer tracer.Stop()
-
+	
 	err := profiler.Start(
 		profiler.WithService(cfg.Service),
 		profiler.WithEnv(cfg.Env),
@@ -59,7 +54,9 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Datadog instrumentation defers
 	defer profiler.Stop()
+	defer tracer.Stop()
 
 	// Plug middlerware
 	server.Use(middlerware.LoggerMiddleware(middlerware.Logger))
@@ -69,15 +66,6 @@ func main() {
 	// Routes
 	routes.RegisterRoutes(server)
 
-	// 404 routes
-	server.NoRoute(func(ctx *gin.Context) {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"error":   "Endpoint not found",
-			"path":    ctx.Request.URL.Path,
-			"message": "Please check endpoint",
-		})
-
-	})
 
 	// App startup logs
 	middlerware.Logger.Info("Application started")
