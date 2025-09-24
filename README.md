@@ -119,8 +119,8 @@ GET /route?start=Alewife&end=Government+Center
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/subway-routing-service.git
-cd subway-routing-service
+git clone https://github.com/your-username/subway-routes-stations-service.git
+cd subway-routes-stations-service
 ```
 
 2. Install dependencies (Go modules):
