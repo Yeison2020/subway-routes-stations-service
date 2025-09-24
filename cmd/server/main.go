@@ -1,25 +1,26 @@
 package main
 
 import (
-	
-     "log"
-	 "net/http"
+	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 
+	gintrace "github.com/DataDog/dd-trace-go/contrib/gin-gonic/gin/v2"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
+	"github.com/DataDog/dd-trace-go/v2/profiler"
+
 	"github.com/yeison2020/subway-routing-service/internal/config"
-	"github.com/yeison2020/subway-routing-service/internal/routes"
 	"github.com/yeison2020/subway-routing-service/internal/mbta"
 	"github.com/yeison2020/subway-routing-service/internal/middlerware"
-
-
+	"github.com/yeison2020/subway-routing-service/internal/routes"
 )
 
 func main() {
 
-   // Load .env
+	// Load .env
 	_ = godotenv.Load()
 
 	// Initialize Zap logger
@@ -30,22 +31,47 @@ func main() {
 
 	cfg := config.LoadConfig()
 
-    gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 
 	server := gin.New()
+
+	server.Use(gin.Recovery(), gin.Logger())
+
+	server.Use(gintrace.Middleware(cfg.Service))
+
+	tracer.Start(
+		tracer.WithEnv(cfg.Env),
+		tracer.WithService(cfg.Service),
+		tracer.WithServiceVersion(cfg.Version),
+	)
+	defer tracer.Stop()
+
+	err := profiler.Start(
+		profiler.WithService(cfg.Service),
+		profiler.WithEnv(cfg.Env),
+		profiler.WithVersion(cfg.Version),
+		profiler.WithProfileTypes(
+			profiler.CPUProfile,
+			profiler.HeapProfile,
+		),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer profiler.Stop()
 
 	// Plug middlerware
 	server.Use(middlerware.LoggerMiddleware(middlerware.Logger))
 	server.Use(middlerware.RequestIdMiddleware())
 	server.Use(middlerware.PanicHandler())
 
-
-	// Routes 
+	// Routes
 	routes.RegisterRoutes(server)
 
 	// 404 routes
-	server.NoRoute(func(ctx *gin.Context){
-    	ctx.JSON(http.StatusNotFound, gin.H{
+	server.NoRoute(func(ctx *gin.Context) {
+		ctx.JSON(http.StatusNotFound, gin.H{
 			"error":   "Endpoint not found",
 			"path":    ctx.Request.URL.Path,
 			"message": "Please check endpoint",
@@ -53,16 +79,14 @@ func main() {
 
 	})
 
-		// App startup logs
+	// App startup logs
 	middlerware.Logger.Info("Application started")
 	middlerware.Logger.Info("Server running",
 		zap.String("port", cfg.ServerPort),
 		zap.String("mode", "release"),
 	)
 
-
-
-   	// Run server
+	// Run server
 	log.Fatal(server.Run(":" + cfg.ServerPort))
 
 }

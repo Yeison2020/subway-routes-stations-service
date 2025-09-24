@@ -51,9 +51,8 @@ go.work.sum
 
 # Folder for Rest calls
 /api-testing/
-
 # Ignore Air temporary build folder
-/tmp/
 
+/tmp/
 # Ignore Air config
 .air.toml

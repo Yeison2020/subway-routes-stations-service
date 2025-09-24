@@ -1,7 +1,7 @@
 package services
 
 import (
-   "fmt"
+	"fmt"
 
 	"net/http"
 
@@ -21,20 +21,20 @@ import (
 // @Router /api/v1/health [get]
 func HealthHandlerSwagger(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
-		"status": "ok",
-		"mbta":   "ok, n routes",
+		"mbta": "ok, n routes",
 	})
 }
 
-func HealthHandler(cfg *config.Config, client mbta.Client)  gin.HandlerFunc{
+func HealthHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
 
-		health := map[string]interface{} {
-			"status": "ok",
+		health := map[string]interface{}{
+			"status":  "healthy",
+			"message": "API is running",
 		}
 
-		routes, err := client.FetchRoutes(cfg.MBTAApiKey)
+		routes, err := client.FetchRoutes(cfg.MBTAApiKey, ctx)
 
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -43,14 +43,12 @@ func HealthHandler(cfg *config.Config, client mbta.Client)  gin.HandlerFunc{
 			health["mbta"] = fmt.Sprintf("ok, %d routes", len(routes))
 		}
 
-
-		code := http.StatusOK 
+		code := http.StatusOK
 		if health["status"] == "fail" {
 			code = http.StatusServiceUnavailable
 		}
 
 		ctx.JSON(code, health)
-
 
 	}
 

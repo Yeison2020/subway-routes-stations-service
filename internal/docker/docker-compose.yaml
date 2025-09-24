@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
   datadog-simple-go:
     image: "gcr.io/datadoghq/agent:7.70.2"
@@ -17,12 +17,13 @@ services:
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
   simple-go:
-    build: app/
+    build: ../../
     ports:
       - "8080:8080"
     container_name: simple-go
     environment:
+      - PORT=8080
       - DD_AGENT_HOST=datadog-simple-go
-      - DD_TRACE_DEBUG=true
+      - DD_TRACE_DEBUG=false
     depends_on:
       - datadog-simple-go
