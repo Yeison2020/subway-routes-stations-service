@@ -161,7 +161,7 @@ The server runs on `http://localhost:8080` by default.
 Build and run the app using Docker:
 
 ```bash
-docker build -t subway-routing-service .
+docker build -t subway-routes-stations-service .
 docker run -p 8080:8080 --env MBTA_API_KEY=your_api_key subway-routing-service
 ```
 

@@ -1,24 +1,19 @@
 package utils
 
-
 import (
 	"fmt"
 	"github.com/yeison2020/subway-routing-service/internal/mbta"
-	
 )
 
-
 type Edge struct {
-	StationID string 
-	Line string
+	StationID string
+	Line      string
 }
-
 
 type Graph struct {
 	Nodes map[string][]Edge
 	Names map[string]string
 }
-
 
 // BuildGraph builds a bidirectional graph from routes
 /*
@@ -28,19 +23,18 @@ Each route between stations is shown with two arrows, one in each direction.
 func BuildGraph(routes []mbta.Route) *Graph {
 
 	g := &Graph{
-		Nodes : make(map[string][]Edge),
-		Names : make(map[string]string),
+		Nodes: make(map[string][]Edge),
+		Names: make(map[string]string),
 	}
-
 
 	for _, route := range routes {
 		for i, s := range route.Stations {
 			g.Names[s.ID] = s.Name
 
-			if i < len(route.Stations) - 1 {
-				next := route.Stations[i +1 ]
+			if i < len(route.Stations)-1 {
+				next := route.Stations[i+1]
 				g.Nodes[s.ID] = append(g.Nodes[s.ID], Edge{StationID: next.ID, Line: route.Name})
-				g.Nodes[next.ID] = append(g.Nodes[next.ID], Edge{StationID: s.ID, Line:route.Name})
+				g.Nodes[next.ID] = append(g.Nodes[next.ID], Edge{StationID: s.ID, Line: route.Name})
 			}
 		}
 	}

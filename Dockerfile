@@ -2,7 +2,7 @@
 FROM golang:1.25.1
 
 # Set working directory
-WORKDIR /app
+WORKDIR /
 
 # Copy all source code
 COPY . .
@@ -17,7 +17,7 @@ RUN go build -o subway-service ./cmd/server/main.go
 EXPOSE 8080
 
 # Set environment variable (replace with your key)
-ENV MBTA_API_KEY=""
+ENV MBTA_API_KEY="81058e8b660047bbb09238cc53958f27"
 
 # Run the binary
 CMD ["./subway-service"]

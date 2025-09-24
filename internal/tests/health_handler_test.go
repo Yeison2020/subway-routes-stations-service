@@ -15,19 +15,19 @@ import (
 )
 
 type mockMBTAClient struct {
-    routes []mbta.Route
-    err    error
+	routes []mbta.Route
+	err    error
 }
 
 func (m *mockMBTAClient) FetchRoutes(apiKey string) ([]mbta.Route, error) {
-    return m.routes, m.err
+	return m.routes, m.err
 }
 
 func (m *mockMBTAClient) FetchStops(apiKey, routeID string) ([]mbta.Station, error) {
-    return []mbta.Station{
-        {ID: "1", Name: "Station A"},
-        {ID: "2", Name: "Station B"},
-    }, nil
+	return []mbta.Station{
+		{ID: "1", Name: "Station A"},
+		{ID: "2", Name: "Station B"},
+	}, nil
 }
 
 func TestHealthHandler_Success(t *testing.T) {
@@ -40,8 +40,6 @@ func TestHealthHandler_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 	cfg := &config.Config{MBTAApiKey: "fake-key"}
-
-
 
 	r.GET("/health", services.HealthHandler(cfg, mockClient))
 
@@ -59,8 +57,6 @@ func TestHealthHandler_Success(t *testing.T) {
 	assert.Equal(t, "ok", body["status"])
 	assert.Contains(t, body["mbta"], "2 routes")
 }
-
-
 
 func TestHealthHandler_Failure(t *testing.T) {
 	mockClient := &mockMBTAClient{

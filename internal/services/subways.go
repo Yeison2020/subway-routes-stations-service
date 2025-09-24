@@ -3,7 +3,6 @@ package services
 import (
 	"net/http"
 
-
 	"github.com/gin-gonic/gin"
 	"github.com/yeison2020/subway-routing-service/internal/config"
 	"github.com/yeison2020/subway-routing-service/internal/mbta"
@@ -41,24 +40,22 @@ func GetSubwaysHandlerSwagger(c *gin.Context) {
 	})
 }
 
-
 // GetSubwaysHandler returns all subway routes with their stations
-func GetSubwaysHandler(cfg *config.Config,  client mbta.Client) gin.HandlerFunc {
-	return func(c *gin.Context) {
+func GetSubwaysHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
 		// 1. Fetch all subway routes
-		routesData, err := client.FetchRoutes(cfg.MBTAApiKey)
+		routesData, err := client.FetchRoutes(cfg.MBTAApiKey, ctx)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error 1": err.Error()})
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error 1": err.Error()})
 			return
 		}
-
 		var routes []mbta.Route
 
 		// 2. Fetch stations for each route and nest
 		for _, r := range routesData {
-			stations, err := client.FetchStops(cfg.MBTAApiKey, r.ID)
+			stations, err := client.FetchStops(cfg.MBTAApiKey, r.ID, ctx)
 			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error 2": err.Error()})
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error 2": err.Error()})
 				return
 			}
 
@@ -70,7 +67,7 @@ func GetSubwaysHandler(cfg *config.Config,  client mbta.Client) gin.HandlerFunc 
 		}
 
 		// 3. Return nested response
-		c.JSON(http.StatusOK, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
 			"routes": routes,
 		})
 	}

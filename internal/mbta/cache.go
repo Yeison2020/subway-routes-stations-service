@@ -1,10 +1,9 @@
 package mbta
 
 import (
-	"time"
 	"sync"
+	"time"
 )
-
 
 // In-Memory Cache
 
@@ -28,8 +27,6 @@ func InitCache(ttlSeconds int) {
 		ttl:  time.Duration(ttlSeconds) * time.Second,
 	}
 }
-
-
 
 // get from cache
 func (c *Cache) Get(key string) ([]Station, bool) {

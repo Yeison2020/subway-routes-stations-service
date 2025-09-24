@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  datadog-simple-go:
+    image: "gcr.io/datadoghq/agent:7.70.2"
+    container_name: datadog-simple-go
+    env_file:
+      - ~/sandbox.docker.env
+    environment:
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOG_LEVEL=INFO
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_CONTAINER_EXCLUDE="name:datadog-simple-go"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+  simple-go:
+    build: ../../
+    ports:
+      - "8080:8080"
+    container_name: simple-go
+    environment:
+      - PORT=8080
+      - DD_AGENT_HOST=datadog-simple-go
+      - DD_TRACE_DEBUG=false
+    depends_on:
+      - datadog-simple-go

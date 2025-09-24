@@ -49,7 +49,7 @@ func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 		}
 
 		// Fetch all routes
-		routes, err := client.FetchRoutes(cfg.MBTAApiKey)
+		routes, err := client.FetchRoutes(cfg.MBTAApiKey, ctx)
 
 		if err != nil {
 			middlerware.Logger.Error(err.Error())
@@ -57,11 +57,10 @@ func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 			return
 		}
 
-
 		// Fetch stations for each route (cached)
 
 		for i, r := range routes {
-			stations, err := client.FetchStops(cfg.MBTAApiKey, r.ID)
+			stations, err := client.FetchStops(cfg.MBTAApiKey, r.ID, ctx)
 
 			if err != nil {
 				middlerware.Logger.Error(err.Error())
@@ -71,7 +70,6 @@ func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 			routes[i].Stations = stations
 		}
 
-
 		// Build the graph
 		g := utils.BuildGraph(routes)
 
@@ -79,11 +77,10 @@ func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 
 		stationsResult, linesResult, err := g.FindRouteBFS(start, end)
 
-
 		if err != nil {
 			middlerware.Logger.Error(err.Error())
 			ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-			return 
+			return
 		}
 
 		// BuildRouteDescription here
@@ -98,6 +95,5 @@ func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 			"description": description, // Human-readable route
 		})
 	}
-
 
 }
