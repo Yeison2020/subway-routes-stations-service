@@ -66,7 +66,7 @@ This service models the subway network as a **graph**, supports caching, and pro
 
 ## API Endpoints
 
-### GET api/v1/heatlhz
+## GET api/v1/heatlhz
 
 - Returns ok numbers of routes and status of API
 - **Example Request:**  
@@ -82,7 +82,7 @@ GET /api/v1/heatlhz
 }
 ```
 ---
-### GET api/v1/subways
+## GET api/v1/subways
 
 - Returns all subway routes and their stations.  
 - **Example Request:**  
@@ -105,7 +105,7 @@ GET /api/v1/subways
 
 ---
 
-### GET /api/v1/routes?start=<station>&end=<station>
+## GET /api/v1/routes?start=<station>&end=<station>
 
 - Computes a valid subway route between two stations, including transfers.  
 - **Query Parameters:**  
@@ -186,7 +186,7 @@ The server runs on `http://localhost:8080` by default.
 
 ## Swagger 
 
-Navigate to ```http://localhost:8080/swagger/index.html``
+Navigate to ```http://localhost:8080/swagger/index.html```
 
 ---
 
