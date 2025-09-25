@@ -54,7 +54,7 @@ func TestHealthHandler_Success(t *testing.T) {
 	var body map[string]interface{}
 	_ = json.Unmarshal(w.Body.Bytes(), &body)
 
-	assert.Equal(t, "ok", body["status"])
+	assert.Equal(t, "healthy", body["status"])
 	assert.Contains(t, body["mbta"], "2 routes")
 }
 

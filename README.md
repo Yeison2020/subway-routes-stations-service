@@ -24,10 +24,6 @@ This service models the subway network as a **graph**, supports caching, and pro
 
 - Fetch all subway routes and stations from the MBTA API.  
 - Cache station data to reduce API calls and improve performance.  
-- Compute valid subway routes between two stations using **BFS graph traversal**.  
-- Generate human-readable directions with transfers.  
-- Handles invalid stations and disconnected routes gracefully.  
-- Containerized with Docker for easy deployment.  
 
 ---
 
@@ -66,7 +62,7 @@ This service models the subway network as a **graph**, supports caching, and pro
 
 ## API Endpoints
 
-## GET api/v1/heatlhz
+### GET api/v1/heatlhz
 
 - Returns ok numbers of routes and status of API
 - **Example Request:**  
@@ -82,7 +78,7 @@ GET /api/v1/heatlhz
 }
 ```
 ---
-## GET api/v1/subways
+### GET api/v1/subways
 
 - Returns all subway routes and their stations.  
 - **Example Request:**  
@@ -105,7 +101,7 @@ GET /api/v1/subways
 
 ---
 
-## GET /api/v1/routes?start=<station>&end=<station>
+### GET /api/v1/routes?start=<station>&end=<station>
 
 - Computes a valid subway route between two stations, including transfers.  
 - **Query Parameters:**  
