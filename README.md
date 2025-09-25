@@ -171,8 +171,8 @@ The server runs on `http://localhost:8080` by default.
 ## Environment Variables
 
 | Variable       | Description                     |
-|----------------|---------------------------------|
-| `MBTA_API_KEY` | Your MBTA API key               |
+|----------------|------------------------------------------------------|
+| `MBTA_API_KEY` |[MBTA v3 APIs](https://www.mbta.com/developers/v3-api)|
 
 ---
 
