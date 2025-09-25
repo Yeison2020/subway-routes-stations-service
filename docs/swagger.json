@@ -1,10 +1,17 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This API provides subway routes and paths between stations using MBTA data.",
+        "title": "Subway Routing Service API",
+        "contact": {
+            "name": "Yeison Casado"
+        },
+        "version": "1.0"
     },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
     "paths": {
-        "/api/v1/health": {
+        "/healthz": {
             "get": {
                 "description": "Returns the status of the service and MBTA API",
                 "consumes": [
@@ -35,7 +42,7 @@
                 }
             }
         },
-        "/api/v1/routes": {
+        "/routes": {
             "get": {
                 "description": "Returns stations, lines, and description for a route between start and end",
                 "consumes": [
@@ -102,7 +109,7 @@
                 }
             }
         },
-        "/api/v1/subways": {
+        "/subways": {
             "get": {
                 "description": "Returns a list of subway routes with nested stations",
                 "consumes": [

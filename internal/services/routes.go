@@ -2,6 +2,7 @@ package services
 
 import (
 	"net/http"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yeison2020/subway-routing-service/internal/config"
@@ -28,7 +29,7 @@ type RouteResponse struct {
 // @Failure 400 {object} map[string]string
 // @Failure 404 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /api/v1/routes [get]
+// @Router /routes [get]
 func GetRouteHandlerSwagger(ctx *gin.Context) {
 	ctx.JSON(200, map[string]interface{}{
 		"stations":    [][]string{{"station1", "station2"}},
@@ -49,6 +50,7 @@ func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 		}
 
 		// Fetch all routes
+
 		routes, err := client.FetchRoutes(cfg.MBTAApiKey, ctx)
 
 		if err != nil {
@@ -70,12 +72,16 @@ func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 			routes[i].Stations = stations
 		}
 
+
+		fmt.Print(routes)
 		// Build the graph
 		g := utils.BuildGraph(routes)
 
+		fmt.Println(g)
+
 		// Find the route
 
-		stationsResult, linesResult, err := g.FindRouteBFS(start, end)
+		stationsResult, linesResult, err := g.FindAllRoutesBFS(start, end, 3)
 
 		if err != nil {
 			middlerware.Logger.Error(err.Error())
@@ -85,7 +91,7 @@ func GetRouteHandler(cfg *config.Config, client mbta.Client) gin.HandlerFunc {
 
 		// BuildRouteDescription here
 
-		description := utils.BuildRouteDescription(stationsResult, linesResult)
+		description := utils.BuildRouteDescriptions(stationsResult, linesResult)
 
 		//Return JSON response
 

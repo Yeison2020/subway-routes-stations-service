@@ -9,13 +9,15 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "Yeison Casado"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/health": {
+        "/healthz": {
             "get": {
                 "description": "Returns the status of the service and MBTA API",
                 "consumes": [
@@ -46,7 +48,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/routes": {
+        "/routes": {
             "get": {
                 "description": "Returns stations, lines, and description for a route between start and end",
                 "consumes": [
@@ -113,7 +115,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/subways": {
+        "/subways": {
             "get": {
                 "description": "Returns a list of subway routes with nested stations",
                 "consumes": [
@@ -151,12 +153,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "localhost:8080",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Subway Routing Service API",
+	Description:      "This API provides subway routes and paths between stations using MBTA data.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

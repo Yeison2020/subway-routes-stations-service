@@ -1,7 +1,14 @@
+basePath: /api/v1
+host: localhost:8080
 info:
-  contact: {}
+  contact:
+    name: Yeison Casado
+  description: This API provides subway routes and paths between stations using MBTA
+    data.
+  title: Subway Routing Service API
+  version: "1.0"
 paths:
-  /api/v1/health:
+  /healthz:
     get:
       consumes:
       - application/json
@@ -22,7 +29,7 @@ paths:
       summary: Health check
       tags:
       - Health
-  /api/v1/routes:
+  /routes:
     get:
       consumes:
       - application/json
@@ -68,7 +75,7 @@ paths:
       summary: Get subway route
       tags:
       - Routes
-  /api/v1/subways:
+  /subways:
     get:
       consumes:
       - application/json

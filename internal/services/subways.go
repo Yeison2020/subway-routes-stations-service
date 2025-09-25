@@ -16,7 +16,7 @@ import (
 // @Produce  json
 // @Success 200 {object} map[string]interface{}
 // @Failure 500 {object} map[string]string
-// @Router /api/v1/subways [get]
+// @Router /subways [get]
 func GetSubwaysHandlerSwagger(c *gin.Context) {
 	c.JSON(200, map[string]interface{}{
 		"routes": []map[string]interface{}{

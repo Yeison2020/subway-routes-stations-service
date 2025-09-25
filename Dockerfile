@@ -1,23 +1,43 @@
-# Use Go 1.25.1 image
-FROM golang:1.25.1
+# Stage 1: Build
+
+FROM golang:1.25.1-alpine AS builder
+
+# Install git for dependencies
+RUN apk add --no-cache git
 
 # Set working directory
-WORKDIR /
+WORKDIR /app
+
+# Copy go.mod and go.sum first to cache dependencies
+COPY go.mod go.sum ./
+RUN go mod download
 
 # Copy all source code
 COPY . .
 
-# Download dependencies
-RUN go mod download
+# Build a static Linux binary
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o subway-service ./cmd/server/main.go
 
-# Build the binary
-RUN go build -o subway-service ./cmd/server/main.go
+# Stage 2: Minimal runtime
 
-# Expose the port
+FROM alpine:latest
+
+# Create a non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+WORKDIR /app
+
+# Copy binary from builder
+COPY --from=builder /app/subway-service .
+
+# Set ownership and switch to non-root
+USER appuser
+
+# Expose port
 EXPOSE 8080
 
-# Set environment variable (replace with your key)
-ENV MBTA_API_KEY="81058e8b660047bbb09238cc53958f27"
+# Environment variable
+ENV MBTA_API_KEY=
 
-# Run the binary
+# Run the service
 CMD ["./subway-service"]

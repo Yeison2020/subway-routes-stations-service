@@ -18,7 +18,7 @@ import (
 // @Produce  json
 // @Success 200 {object} map[string]interface{}
 // @Failure 503 {object} map[string]interface{}
-// @Router /api/v1/health [get]
+// @Router /healthz [get]
 func HealthHandlerSwagger(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
 		"mbta": "ok, n routes",

@@ -2,21 +2,31 @@ package utils
 
 import "fmt"
 
-func BuildRouteDescription(stations, lines []string) string {
-	if len(stations) == 0 || len(lines) == 0 {
-		return ""
-	}
+func BuildRouteDescriptions(allStations [][]string, allLines [][]string) []string {
+	descriptions := make([]string, len(allStations))
 
-	description := "Start at " + stations[0]
-	currentLine := lines[0]
+	for i := range allStations {
+		stations := allStations[i]
+		lines := allLines[i]
 
-	for i := 1; i < len(stations); i++ {
-		if lines[i-1] != currentLine {
-			description += fmt.Sprintf(", transfer at %s to %s", stations[i-1], lines[i-1])
-			currentLine = lines[i-1]
+		if len(stations) == 0 || len(lines) == 0 {
+			descriptions[i] = ""
+			continue
 		}
+
+		desc := "Start at " + stations[0]
+		currentLine := lines[0]
+
+		for j := 1; j < len(stations); j++ {
+			if lines[j-1] != currentLine {
+				desc += fmt.Sprintf(", transfer at %s to %s", stations[j-1], lines[j-1])
+				currentLine = lines[j-1]
+			}
+		}
+
+		desc += fmt.Sprintf(", take %s to %s.", currentLine, stations[len(stations)-1])
+		descriptions[i] = desc
 	}
 
-	description += fmt.Sprintf(", take %s to %s.", currentLine, stations[len(stations)-1])
-	return description
+	return descriptions
 }

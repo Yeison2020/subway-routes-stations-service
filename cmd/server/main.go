@@ -1,3 +1,10 @@
+// @title Subway Routing Service API
+// @version 1.0
+// @description This API provides subway routes and paths between stations using MBTA data.
+// @contact.name Yeison Casado
+// @host localhost:8080
+// @BasePath /api/v1
+
 package main
 
 import (
@@ -61,7 +68,7 @@ func main() {
 	// Plug middlerware
 	server.Use(middlerware.LoggerMiddleware(middlerware.Logger))
 	server.Use(middlerware.RequestIdMiddleware())
-	server.Use(middlerware.PanicHandler())
+	server.Use(middlerware.PanicHandler(middlerware.Logger))
 
 	// Routes
 	routes.RegisterRoutes(server)
