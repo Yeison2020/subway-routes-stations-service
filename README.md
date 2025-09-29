@@ -178,7 +178,7 @@ The server runs on `http://localhost:8080` by default.
 - List subway lines: `GET api/v1/subway`  
 - Compute a route: `GET /route?start=<station>&end=<station>`  
 
--- 
+--- 
 
 ## Swagger 
 
@@ -194,6 +194,13 @@ Build and run the app using Docker:
 docker build -t subway-routes-stations-service .
 docker run -p 8080:8080 --env MBTA_API_KEY=your_api_key subway-routes-stations-service
 ```
+The Docker Compose setup (/internal/docker) includes the Datadog agent and builds the app to collect traces and logs.
+
+To use it, add your Datadog API key:
+
+```DD_API_KEY=<your_api_key>```
+
+Trace and log correlation is implemented with the Gin context to extract trace/span IDs.
 
 ---
 
